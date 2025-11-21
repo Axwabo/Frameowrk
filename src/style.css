@@ -28,6 +28,7 @@ body {
     place-items: center;
     min-width: 320px;
     min-height: 100vh;
+    cursor: url("./assets/mouse.png") 16 4, pointer;
 }
 
 h1 {
