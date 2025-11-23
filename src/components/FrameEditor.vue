@@ -100,16 +100,18 @@ function onMouseMove(ev: MouseEvent) {
                 element.setAttributeNS(null, "y", ev.offsetY.toFixed(0));
             break;
         case "Circumference":
-            const rawLength = element.getAttributeNS(null, "stroke-dasharray");
-            const fullCircumference = Math.PI * 2 * parseFloat(element.getAttributeNS(null, "r")!);
-            const length = Math.max(1, (rawLength ? parseFloat(rawLength.split(" ")[0]!) : fullCircumference) + ev.movementX);
-            if (length < fullCircumference)
-                element.setAttributeNS(null, "stroke-dasharray", `${length.toFixed(0)} 0`);
+            const rawOffset = element.getAttributeNS(null, "stroke-dashoffset");
+            const offset = rawOffset ? parseFloat(rawOffset) : 0;
+            const newOffset = Math.max(0, Math.min(100, offset + ev.movementX));
+            if (newOffset > 0)
+                element.setAttributeNS(null, "stroke-dashoffset", newOffset + "%");
             else
-                element.removeAttributeNS(null, "stroke-dasharray");
+                element.removeAttributeNS(null, "stroke-dashoffset");
             break;
         case "Circle":
-            element.setAttributeNS(null, "r", Math.sqrt(dx * dx + dy * dy).toFixed(0));
+            const radius = Math.round(Math.sqrt(dx * dx + dy * dy));
+            element.setAttributeNS(null, "r", radius.toString());
+            element.setAttributeNS(null, "stroke-dasharray", (radius * 2 * Math.PI).toString());
             break;
         case "Rotate":
             transform(m => m.rotateSelf(0, 0, ev.movementX));
