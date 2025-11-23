@@ -7,6 +7,8 @@ interface State {
     levelIndex: number;
     completionScores: number[];
     attempt: number;
+    mouseX: number;
+    mouseY: number;
 }
 
 const store = defineStore("game", {
@@ -14,7 +16,9 @@ const store = defineStore("game", {
         levels: shallowReactive([]),
         levelIndex: 0,
         completionScores: shallowReactive([]),
-        attempt: 0
+        attempt: 0,
+        mouseX: 0,
+        mouseY: 0
     })
 });
 

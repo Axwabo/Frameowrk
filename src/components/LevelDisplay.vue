@@ -41,8 +41,8 @@ useWindowEvent("resize", onLoaded);
             </div>
         </template>
         <template v-else>
-            <canvas class="frame" ref="drawingCanvas" :width :height></canvas>
             <img class="frame" alt="" draggable="false" :src="level.frame" :width :height>
+            <canvas class="frame" ref="drawingCanvas" :width :height></canvas>
         </template>
     </div>
 </template>

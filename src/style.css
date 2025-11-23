@@ -29,6 +29,7 @@ body {
     height: 100svh;
     max-height: 100svh;
     cursor: url("./assets/mouse.png") 16 4, pointer;
+    overflow: hidden;
 }
 
 h1 {
