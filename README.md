@@ -21,7 +21,11 @@ The editor can be used to create new levels, which can be exported and/or saved 
 
 SVG tools are the following:
 
-- none yet
+- Move object (translate)
+- Line
+- Rectangle
+- Circle
+- Delete
 
 You can also write the contents of the SVG frame.
 
