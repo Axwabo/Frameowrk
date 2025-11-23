@@ -15,19 +15,28 @@ Upon the cat reaching the mouse, it will circle around it as long as the mouse i
 
 Wiggle the mouse for the cat to pounce and draw a curve.
 
+The cat will move faster if it's farther from the mouse, and slower if it's closer.
+
 # Editor
 
 The editor can be used to create new levels, which can be exported and/or saved to the cache.
 
 SVG tools are the following:
 
-- Move object (translate)
+- Move (translate object)
 - Line
 - Rectangle
 - Circle
+- Circumference (turn circle into arc)
+- Rotate
+- Undo
 - Delete
 
-You can also write the contents of the SVG frame.
+You can also edit the contents of the SVG frame by clicking "Edit SVG"
+
+> [!NOTE]
+> Moving a rotated object moves the object the way it's oriented instead of relative to the canvas.
+> This is because I couldn't figure out the math.
 
 # Frameworks & Libraries
 
