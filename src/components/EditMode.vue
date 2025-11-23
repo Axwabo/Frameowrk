@@ -7,7 +7,7 @@ import { storeToRefs } from "pinia";
 
 const { download } = useEditorStore();
 
-const { level } = storeToRefs(useEditorStore());
+const { saving, level } = storeToRefs(useEditorStore());
 
 const upload = useTemplateRef("upload");
 
@@ -42,7 +42,7 @@ async function performUpload() {
     <div class="options">
         <label for="upload" tabindex="0">{{ text }}</label>
         <button v-on:click="text = 'Select File'; level = { image: '', frame: '' }">Clear</button>
-        <button v-on:click="download(display!.image!)" :disabled="!level.image || !level.frame">Download</button>
+        <button v-on:click="download(display!.image!)" :disabled="saving || !level.image || !level.frame">Download</button>
     </div>
 </template>
 

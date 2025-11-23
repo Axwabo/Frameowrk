@@ -6,6 +6,18 @@ import { saveAs } from "file-saver";
 
 interface State {
     level: Level;
+    saving: boolean;
+}
+
+async function createZip(element: HTMLImageElement, frame: string) {
+    const canvas = new OffscreenCanvas(element.naturalWidth, element.naturalHeight);
+    const ctx = canvas.getContext("2d")!;
+    ctx.drawImage(element, 0, 0);
+    const image = await canvas.convertToBlob();
+    const zip = new JSZip();
+    zip.file("image.png", image);
+    zip.file("frame.svg", frame);
+    return await zip.generateAsync({ type: "blob" });
 }
 
 const store = defineStore("editor", {
@@ -13,19 +25,21 @@ const store = defineStore("editor", {
         level: reactive({
             image: "",
             frame: ""
-        })
+        }),
+        saving: false
     }),
     actions: {
         async download(element: HTMLImageElement) {
-            const canvas = new OffscreenCanvas(element.naturalWidth, element.naturalHeight);
-            const ctx = canvas.getContext("2d")!;
-            ctx.drawImage(element, 0, 0);
-            const image = await canvas.convertToBlob();
-            const zip = new JSZip();
-            zip.file("image.png", image);
-            zip.file("frame.svg", this.level.frame);
-            const blob = await zip.generateAsync({ type: "blob" });
-            saveAs(blob, "FrameowrkLevel.zip");
+            this.saving = true;
+            try {
+                const blob = await createZip(element, this.level.frame);
+                saveAs(blob, "FrameowrkLevel.zip");
+            } catch (e) {
+                console.error(e);
+                alert("Couldn't download level: " + (e as Error)?.message);
+            } finally {
+                this.saving = false;
+            }
         }
     }
 });
