@@ -85,8 +85,12 @@ function onMouseMove(ev: MouseEvent) {
             element.setAttributeNS(null, "d", `M${startX} ${startY} L${ev.offsetX} ${ev.offsetY}`);
             break;
         case "Rect":
-            element.setAttributeNS(null, "width", dx.toFixed(0));
-            element.setAttributeNS(null, "height", dy.toFixed(0));
+            element.setAttributeNS(null, "width", Math.abs(dx).toFixed(0));
+            element.setAttributeNS(null, "height", Math.abs(dy).toFixed(0));
+            if (dx < 0)
+                element.setAttributeNS(null, "x", ev.offsetX.toFixed(0));
+            if (dy < 0)
+                element.setAttributeNS(null, "y", ev.offsetY.toFixed(0));
             break;
         case "Circle":
             element.setAttributeNS(null, "r", Math.sqrt(dx * dx + dy * dy).toFixed(0));
