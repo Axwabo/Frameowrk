@@ -1,6 +1,34 @@
-# Vue 3 + TypeScript + Vite
+# Frameowrk
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out
-the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+A browser game (PWA) where you control a cat with a mouse to draw frames for pictures.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+You can install it to work offline!
+
+# Gameplay
+
+There are a few levels built-in. Each level has an image (PNG) and a frame (SVG).
+
+The goal is to replicate the frame on the canvas.
+The mouse (cursor) controls a cat which will leave paint behind if the left mouse button is held.
+
+Upon the cat reaching the mouse, it will circle around it as long as the mouse is stationary.
+
+Wiggle the mouse for the cat to pounce and draw a curve.
+
+# Editor
+
+The editor can be used to create new levels, which can be exported and/or saved to the cache.
+
+SVG tools are the following:
+
+- none yet
+
+You can also write the contents of the SVG frame.
+
+# Frameworks & Libraries
+
+- Vue
+- Vite
+- Vite PWA
+- JSZip
+- FileSaver.js
