@@ -5,6 +5,7 @@ import { readBase64 } from "../levelLoader.ts";
 import useEditorStore from "../editorStore.ts";
 import { storeToRefs } from "pinia";
 import ToolSelector from "./ToolSelector.vue";
+import SvgEditor from "./SvgEditor.vue";
 
 const { download } = useEditorStore();
 
@@ -49,7 +50,10 @@ async function performUpload() {
     <div class="options">
         <label for="upload" tabindex="0">{{ text }}</label>
         <button v-on:click="text = 'Select File'; level = { image: '', frame: '' }">Clear</button>
-        <button v-on:click="download(display!.image!)" :disabled="saving || !level.image || !level.frame">Download</button>
+        <SvgEditor />
+        <button v-on:click="download(display!.image!, display!.editor!.vector!.innerHTML, display!.width, display!.height)"
+                :disabled="saving || !level.image || !level.frame">Download
+        </button>
     </div>
 </template>
 

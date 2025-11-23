@@ -11,13 +11,13 @@ interface State {
     currentTool: Tool;
 }
 
-async function createZip(element: HTMLImageElement, frame: string) {
+async function createZip(element: HTMLImageElement, frame: string, width: number, height: number) {
     const canvas = new OffscreenCanvas(element.naturalWidth, element.naturalHeight);
     const ctx = canvas.getContext("2d")!;
     ctx.drawImage(element, 0, 0);
     const image = await canvas.convertToBlob();
     const zip = new JSZip();
-    zip.file("image.png", image);
+    zip.file("image.png", `<svg viewBox="0 0 ${width} ${height}">${image}</svg>`);
     zip.file("frame.svg", frame);
     return await zip.generateAsync({ type: "blob" });
 }
@@ -32,10 +32,10 @@ const store = defineStore("editor", {
         currentTool: "Line"
     }),
     actions: {
-        async download(element: HTMLImageElement) {
+        async download(image: HTMLImageElement, frame: string, width: number, height: number) {
             this.saving = true;
             try {
-                const blob = await createZip(element, this.level.frame);
+                const blob = await createZip(image, frame, width, height);
                 saveAs(blob, "FrameowrkLevel.zip");
             } catch (e) {
                 console.error(e);

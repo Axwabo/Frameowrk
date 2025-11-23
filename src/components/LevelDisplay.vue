@@ -7,6 +7,8 @@ const { level, edit } = defineProps<{ level: Level; edit?: boolean; }>();
 
 const image = useTemplateRef("image");
 
+const editor = useTemplateRef("editor");
+
 const width = ref(0);
 const height = ref(0);
 
@@ -18,14 +20,14 @@ function onLoaded() {
     height.value = Math.floor(rect.height + 160);
 }
 
-defineExpose({ image, width, height });
+defineExpose({ image, width, height, editor });
 </script>
 
 <template>
     <div class="level">
         <img id="image" :src="level.image" alt="" draggable="false" v-on:load="onLoaded" ref="image">
         <div id="editor" class="frame" v-if="edit" :style="`width: ${width}px; height: ${height}px;`">
-            <FrameEditor />
+            <FrameEditor ref="editor" :width :height />
         </div>
         <template v-else>
             <canvas class="frame" :width :height></canvas>
@@ -46,6 +48,7 @@ defineExpose({ image, width, height });
 #image {
     max-height: calc(100% - 160px);
     max-width: calc(90vw - 160px);
+    pointer-events: none;
 }
 
 #editor {
