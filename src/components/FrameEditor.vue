@@ -58,12 +58,20 @@ function onMouseDown(ev: MouseEvent) {
             rect.setAttribute("y", startY.toFixed(0));
             rect.setAttribute("fill", "none");
             break;
+        case "Circle":
+            const circle = append("circle");
+            circle.setAttribute("cx", startX.toFixed(0));
+            circle.setAttribute("cy", startY.toFixed(0));
+            circle.setAttribute("fill", "none");
+            break;
     }
 }
 
 function onMouseMove(ev: MouseEvent) {
     if (!element)
         return;
+    const dx = ev.offsetX - startX;
+    const dy = ev.offsetY - startY;
     switch (currentTool.value) {
         case "Move":
             const matrix = getMatrix();
@@ -74,8 +82,11 @@ function onMouseMove(ev: MouseEvent) {
             element.setAttributeNS(null, "d", `M${startX} ${startY} L${ev.offsetX} ${ev.offsetY}`);
             break;
         case "Rect":
-            element.setAttributeNS(null, "width", (ev.offsetX - startX).toFixed(0));
-            element.setAttributeNS(null, "height", (ev.offsetY - startY).toFixed(0));
+            element.setAttributeNS(null, "width", dx.toFixed(0));
+            element.setAttributeNS(null, "height", dy.toFixed(0));
+            break;
+        case "Circle":
+            element.setAttributeNS(null, "r", Math.sqrt(dx * dx + dy * dy).toFixed(0));
             break;
     }
 }
