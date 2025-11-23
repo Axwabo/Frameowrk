@@ -2,6 +2,7 @@
 import useGameStore from "../gameStore.ts";
 import base from "../base.ts";
 import loadLevel from "../levelLoader.ts";
+import LevelDisplay from "./LevelDisplay.vue";
 
 const { levels } = useGameStore();
 
@@ -15,8 +16,7 @@ for (let i = 0; i < builtInLevelCount; i++) {
 </script>
 
 <template>
-    <img :src="levels[0]!.image">
-    <img :src="levels[0]!.frame" alt="" width="50" height="50">
+    <LevelDisplay :level="levels[0]!" />
 </template>
 
 <style scoped>
