@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import useEditorStore from "../editorStore.ts";
-import { useTemplateRef } from "vue";
+import { onMounted, onUnmounted, useTemplateRef } from "vue";
 
 const { width, height } = defineProps<{ width: number, height: number; }>();
 
@@ -47,7 +47,11 @@ function onMouseMove(ev: MouseEvent) {
 
 function commit() {
     level.value.frame = vector.value!.innerHTML;
+    element = null;
 }
+
+onMounted(() => window.addEventListener("mouseup", commit));
+onUnmounted(() => window.removeEventListener("mouseup", commit));
 </script>
 
 <template>
@@ -55,13 +59,13 @@ function commit() {
          :class="[currentTool.toLowerCase()]" id="editorSVG" v-html="level.frame" ref="vector" :width :height :viewBox="`0 0 ${width} ${height}`"
          v-on:click="onClick"
          v-on:mousedown="onMouseDown"
-         v-on:mousemove="onMouseMove"
-         v-on:mouseup="element = null; commit()"></svg>
+         v-on:mousemove="onMouseMove"></svg>
 </template>
 
 <style>
 #editorSVG {
     z-index: 1;
+    cursor: default;
 }
 
 #editorSVG.select * {
@@ -74,6 +78,10 @@ function commit() {
 
 #editorSVG.delete * {
     cursor: pointer;
+}
+
+#editorSVG.delete :is(path, circle, rect):hover {
+    stroke: rgba(150, 0, 0);
 }
 
 #editorSVG:is(.line, .rect, .circle) {
