@@ -6,6 +6,7 @@ import useEditorStore from "../editorStore.ts";
 import { storeToRefs } from "pinia";
 import ToolSelector from "./ToolSelector.vue";
 import SvgEditor from "./SvgEditor.vue";
+import useWindowEvent from "../composables/useWindowEvent.ts";
 
 const { download, history } = useEditorStore();
 
@@ -20,12 +21,11 @@ const text = ref("Select File");
 
 const disabled = ref(false);
 
-async function performUpload(input: HTMLInputElement) {
+async function performUpload(file: File | null | undefined) {
+    if (!file)
+        return;
     disabled.value = true;
     try {
-        const file = input.files?.item(0);
-        if (!file)
-            return;
         if (file.type.startsWith("image/")) {
             level.value.image = await readBase64(file);
             text.value = file.name;
@@ -45,12 +45,14 @@ function undo() {
     if (history.length)
         level.value.frame = history.pop()!;
 }
+
+useWindowEvent("paste", ev => performUpload(ev.clipboardData?.files[0]));
 </script>
 
 <template>
     <h2>EDIT MODE</h2>
-    <input type="file" accept="image/*" id="upload" ref="upload" v-on:change="performUpload(upload!)" :disabled>
-    <input type="file" accept="application/zip" id="import" ref="import" v-on:change="performUpload(importInput!)" :disabled>
+    <input type="file" accept="image/*" id="upload" ref="upload" v-on:change="performUpload(upload!.files?.item(0))" :disabled>
+    <input type="file" accept="application/zip" id="import" ref="import" v-on:change="performUpload(importInput!.files?.item(0))" :disabled>
     <LevelDisplay edit :level ref="display" />
     <div class="options">
         <ToolSelector tool="Move">⇆</ToolSelector>
