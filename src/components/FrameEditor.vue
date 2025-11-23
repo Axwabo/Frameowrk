@@ -35,10 +35,19 @@ function append(tag: keyof SVGElementTagNameMap) {
     return newElement;
 }
 
+function getMatrix() {
+    return new DOMMatrix(getComputedStyle(element!).transform);
+}
+
 function onMouseDown(ev: MouseEvent) {
     startX = ev.offsetX;
     startY = ev.offsetY;
     switch (currentTool.value) {
+        case "Move":
+            const svg = ev.target as SVGElement;
+            if (svg.tagName !== "svg")
+                element = svg;
+            break;
         case "Line":
             const path = append("path");
             path.setAttribute("d", `M${startX} ${startY} L${startX} ${startY}`);
@@ -56,6 +65,11 @@ function onMouseMove(ev: MouseEvent) {
     if (!element)
         return;
     switch (currentTool.value) {
+        case "Move":
+            const matrix = getMatrix();
+            matrix.translateSelf(ev.movementX, ev.movementY, 0);
+            element.setAttributeNS(null, "transform", matrix.toString());
+            break;
         case "Line":
             element.setAttributeNS(null, "d", `M${startX} ${startY} L${ev.offsetX} ${ev.offsetY}`);
             break;
@@ -94,6 +108,10 @@ onUnmounted(() => window.removeEventListener("mouseup", commit));
 }
 
 #editorSVG.move * {
+    cursor: move;
+}
+
+#editorSVG.move:active {
     cursor: move;
 }
 
