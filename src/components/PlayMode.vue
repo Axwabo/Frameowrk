@@ -13,5 +13,6 @@ await loadLevels(levels);
 
 <template>
     <h2>Level {{ levelIndex + 1 }}</h2>
-    <LevelDisplay :level="levels[0]!" />
+    <LevelDisplay :level="levels[levelIndex]!" />
+    <p>Move your mouse to control the cat. Hold left click to draw.</p>
 </template>
