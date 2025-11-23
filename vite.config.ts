@@ -1,8 +1,7 @@
 import { VitePWA } from "vite-plugin-pwa";
 import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
-
-const base = "/Frameowrk/";
+import base from "./src/base.ts";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -23,7 +22,7 @@ export default defineConfig({
         },
 
         workbox: {
-            globPatterns: [ "**/*.{js,css,html,svg,png,ico}" ],
+            globPatterns: [ "**/*.{js,css,html,svg,png,ico,zip}" ],
             cleanupOutdatedCaches: true,
             clientsClaim: true
         },
