@@ -26,23 +26,44 @@ function onClick(ev: Event) {
     commit();
 }
 
+function append(tag: keyof SVGElementTagNameMap) {
+    const newElement = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    newElement.setAttribute("stroke", "black");
+    newElement.setAttribute("stroke-width", "3");
+    vector.value!.append(newElement);
+    element = newElement;
+    return newElement;
+}
+
 function onMouseDown(ev: MouseEvent) {
-    if (currentTool.value !== "Line")
-        return;
     startX = ev.offsetX;
     startY = ev.offsetY;
-    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path.setAttribute("d", `M${startX} ${startY} L${startX} ${startY}`);
-    path.setAttribute("stroke", "black");
-    path.setAttribute("stroke-width", "3");
-    vector.value!.append(path);
-    element = path;
+    switch (currentTool.value) {
+        case "Line":
+            const path = append("path");
+            path.setAttribute("d", `M${startX} ${startY} L${startX} ${startY}`);
+            break;
+        case "Rect":
+            const rect = append("rect");
+            rect.setAttribute("x", startX.toFixed(0));
+            rect.setAttribute("y", startY.toFixed(0));
+            rect.setAttribute("fill", "none");
+            break;
+    }
 }
 
 function onMouseMove(ev: MouseEvent) {
-    if (currentTool.value !== "Line" || !element)
+    if (!element)
         return;
-    element.setAttributeNS(null, "d", `M${startX} ${startY} L${ev.offsetX} ${ev.offsetY}`);
+    switch (currentTool.value) {
+        case "Line":
+            element.setAttributeNS(null, "d", `M${startX} ${startY} L${ev.offsetX} ${ev.offsetY}`);
+            break;
+        case "Rect":
+            element.setAttributeNS(null, "width", (ev.offsetX - startX).toFixed(0));
+            element.setAttributeNS(null, "height", (ev.offsetY - startY).toFixed(0));
+            break;
+    }
 }
 
 function commit() {
