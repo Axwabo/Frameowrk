@@ -36,10 +36,9 @@ function onLoaded() {
 .level {
     position: relative;
     display: flex;
-    flex: 1;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow-y: hidden;
 }
 
 #image {
