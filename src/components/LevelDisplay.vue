@@ -10,6 +10,8 @@ const image = useTemplateRef("image");
 
 const editor = useTemplateRef("editor");
 
+const frameImage = useTemplateRef("frameImage");
+
 const drawingCanvas = useTemplateRef("drawingCanvas");
 
 const width = ref(0);
@@ -26,7 +28,7 @@ function onLoaded() {
     height.value = Math.floor(rect.height + 160);
 }
 
-defineExpose({ image, width, height, editor, drawingCanvas });
+defineExpose({ image, width, height, editor, frameImage, drawingCanvas });
 
 useWindowEvent("resize", onLoaded);
 </script>
@@ -41,7 +43,7 @@ useWindowEvent("resize", onLoaded);
             </div>
         </template>
         <template v-else>
-            <img class="frame" alt="" draggable="false" :src="level.frame" :width :height>
+            <img class="frame" alt="" draggable="false" ref="frameImage" :src="level.frame" :width :height>
             <canvas class="frame" ref="drawingCanvas" :width :height></canvas>
         </template>
     </div>
@@ -65,6 +67,7 @@ useWindowEvent("resize", onLoaded);
 
 #frame {
     border: 1px solid gray;
+    pointer-events: none;
 }
 
 .frame {

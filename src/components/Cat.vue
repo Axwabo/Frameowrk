@@ -4,7 +4,7 @@ import useAnimationFrame from "../composables/useAnimationFrame.ts";
 import { storeToRefs } from "pinia";
 import useGameStore from "../gameStore.ts";
 
-const { mouseX, mouseY } = storeToRefs(useGameStore());
+const { mouseX, mouseY, submitted } = storeToRefs(useGameStore());
 
 const top = ref(100);
 const left = ref(Math.floor(window.innerWidth / 2));
@@ -16,6 +16,8 @@ const rotateDeg = computed(() => `${angle.value * 180 / Math.PI}deg`);
 defineExpose({ top, left, angle });
 
 useAnimationFrame(delta => {
+    if (submitted.value)
+        return;
     let dx = mouseX.value - left.value;
     let dy = mouseY.value - top.value;
     const magnitude = Math.sqrt(dx * dx + dy * dy);

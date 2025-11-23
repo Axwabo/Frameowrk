@@ -2,15 +2,14 @@
 import useGameStore from "../gameStore.ts";
 import { storeToRefs } from "pinia";
 
-const { attempt } = storeToRefs(useGameStore());
+const { attempt, submitted } = storeToRefs(useGameStore());
 </script>
 
 <template>
     <p>Move your mouse to control the cat. Hold left click to draw.</p>
     <div class="buttons">
         <button v-on:click="attempt++">Restart</button>
-        <button>Submit</button>
-        <button>Next</button>
+        <button v-on:click="submitted = true">Submit</button>
     </div>
 </template>
 

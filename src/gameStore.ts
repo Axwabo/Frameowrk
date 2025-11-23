@@ -9,6 +9,7 @@ interface State {
     attempt: number;
     mouseX: number;
     mouseY: number;
+    submitted: boolean;
 }
 
 const store = defineStore("game", {
@@ -18,7 +19,8 @@ const store = defineStore("game", {
         completionScores: shallowReactive([]),
         attempt: 0,
         mouseX: 0,
-        mouseY: 0
+        mouseY: 0,
+        submitted: false
     })
 });
 

@@ -17,6 +17,10 @@ Wiggle the mouse for the cat to pounce and draw a curve.
 
 The cat will move faster if it's farther from the mouse, and slower if it's closer.
 
+> [!IMPORTANT]
+> Resolution changes are not yet handled properly, and might also cause issues
+> if loading a level made for an aspect ratio different from the current one.
+
 # Editor
 
 The editor can be used to create new levels, which can be exported and/or saved to the cache.
