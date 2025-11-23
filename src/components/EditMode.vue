@@ -5,9 +5,13 @@ import { readBase64 } from "../levelLoader.ts";
 import useEditorStore from "../editorStore.ts";
 import { storeToRefs } from "pinia";
 
+const { download } = useEditorStore();
+
 const { level } = storeToRefs(useEditorStore());
 
 const upload = useTemplateRef("upload");
+
+const display = useTemplateRef("display");
 
 const text = ref("Select File");
 
@@ -33,10 +37,13 @@ async function performUpload() {
 <template>
     <h2>EDIT MODE</h2>
     <input type="file" accept="image/*" id="upload" ref="upload" v-on:change="performUpload" :disabled>
-    <LevelDisplay edit :level />
-    <button v-on:click="level = { image: '', frame: '' }">Clear</button>
-    <label for="upload" tabindex="0">{{ text }}</label>
-    <!--  TODO   -->
+    <LevelDisplay edit :level ref="display" />
+    <div><!--TODO--></div>
+    <div class="options">
+        <label for="upload" tabindex="0">{{ text }}</label>
+        <button v-on:click="text = 'Select File'; level = { image: '', frame: '' }">Clear</button>
+        <button v-on:click="download(display!.image!)" :disabled="!level.image || !level.frame">Download</button>
+    </div>
 </template>
 
 <style scoped>
@@ -47,5 +54,12 @@ async function performUpload() {
 label[for="upload"] {
     background-color: aquamarine;
     justify-self: center;
+}
+
+.options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
 }
 </style>

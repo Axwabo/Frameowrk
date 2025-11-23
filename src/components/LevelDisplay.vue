@@ -17,6 +17,8 @@ function onLoaded() {
     width.value = Math.floor(rect.width + 160);
     height.value = Math.floor(rect.height + 160);
 }
+
+defineExpose({ image, width, height });
 </script>
 
 <template>
@@ -44,6 +46,11 @@ function onLoaded() {
 #image {
     max-height: calc(100% - 160px);
     max-width: calc(90vw - 160px);
+}
+
+#editor {
+    box-sizing: border-box;
+    border: 1px solid gray;
 }
 
 .frame {
