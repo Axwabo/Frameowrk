@@ -65,6 +65,11 @@ function onMouseDown(ev: MouseEvent) {
             rect.setAttribute("y", startY.toFixed(0));
             rect.setAttribute("fill", "none");
             break;
+        case "Circumference":
+            const selectedCircle = ev.target as SVGElement;
+            if (selectedCircle.tagName === "circle")
+                element = selectedCircle;
+            break;
         case "Circle":
             const circle = append("circle");
             circle.setAttribute("cx", startX.toFixed(0));
@@ -93,6 +98,15 @@ function onMouseMove(ev: MouseEvent) {
                 element.setAttributeNS(null, "x", ev.offsetX.toFixed(0));
             if (dy < 0)
                 element.setAttributeNS(null, "y", ev.offsetY.toFixed(0));
+            break;
+        case "Circumference":
+            const rawLength = element.getAttributeNS(null, "stroke-dasharray");
+            const fullCircumference = Math.PI * 2 * parseFloat(element.getAttributeNS(null, "r")!);
+            const length = Math.max(1, (rawLength ? parseFloat(rawLength.split(" ")[0]!) : fullCircumference) + ev.movementX);
+            if (length < fullCircumference)
+                element.setAttributeNS(null, "stroke-dasharray", `${length.toFixed(0)} 0`);
+            else
+                element.removeAttributeNS(null, "stroke-dasharray");
             break;
         case "Circle":
             element.setAttributeNS(null, "r", Math.sqrt(dx * dx + dy * dy).toFixed(0));
@@ -142,15 +156,19 @@ useWindowEvent("mouseup", commit);
 }
 
 #editorSVG.rotate * {
-    cursor: grab;
-}
-
-#editorSVG.rotate *:active {
-    cursor: grabbing;
+    cursor: nw-resize;
 }
 
 #editorSVG.rotate:has(:active) {
-    cursor: grabbing;
+    cursor: nw-resize;
+}
+
+#editorSVG.circumference circle {
+    cursor: ew-resize;
+}
+
+#editorSVG.circumference:has(circle:active) {
+    cursor: ew-resize;
 }
 
 #editorSVG.delete * {

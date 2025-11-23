@@ -57,6 +57,7 @@ function undo() {
         <ToolSelector tool="Line">/</ToolSelector>
         <ToolSelector tool="Rect">□</ToolSelector>
         <ToolSelector tool="Circle">〇</ToolSelector>
+        <ToolSelector tool="Circumference">⤵</ToolSelector>
         <ToolSelector tool="Rotate">🔄</ToolSelector>
         <button class="tool" title="Undo" :disabled="!history.length" v-on:click="undo">↩</button>
         <ToolSelector tool="Delete">❌</ToolSelector>
