@@ -15,18 +15,22 @@ export async function loadLevels(target: Level[]) {
     }
 }
 
-export async function loadLevel(data: Blob | Promise<Blob>): Promise<Level> {
+export async function loadLevel(data: Blob | Promise<Blob>, plain?: boolean): Promise<Level> {
     const zip = await JSZip.loadAsync(data);
-    const image = zip.files["image.png"];
-    if (!image)
+    const png = zip.files["image.png"];
+    if (!png)
         throw new Error("Image not found");
     const svg = zip.files["frame.svg"];
     if (!svg)
         throw new Error("Frame not found");
-    return {
-        image: `data:image/png;base64,${await image.async("base64")}`,
-        frame: `data:image/svg+xml;base64,${await svg.async("base64")}`
-    };
+    const image = `data:image/png;base64,${await png.async("base64")}`;
+    if (!plain)
+        return { image, frame: `data:image/svg+xml;base64,${await svg.async("base64")}` };
+    const text = await svg.async("text");
+    const container = document.createElement("div");
+    container.innerHTML = text;
+    const frame = container.querySelector("svg")?.innerHTML ?? "";
+    return { image, frame };
 }
 
 export async function readBase64(file: Blob) {

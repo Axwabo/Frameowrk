@@ -30,7 +30,7 @@ async function performUpload(file: File | null | undefined) {
             level.value.image = await readBase64(file);
             text.value = file.name;
         } else if (file.type.startsWith("application/")) {
-            level.value = await loadLevel(file);
+            level.value = await loadLevel(file, true);
             text.value = file.name;
         }
     } catch (e) {
