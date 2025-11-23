@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import LevelDisplay from "./LevelDisplay.vue";
 import { ref, useTemplateRef } from "vue";
-import { readBase64 } from "../levelLoader.ts";
+import { loadLevel, readBase64 } from "../levelLoader.ts";
 import useEditorStore from "../editorStore.ts";
 import { storeToRefs } from "pinia";
 import ToolSelector from "./ToolSelector.vue";
@@ -12,6 +12,7 @@ const { download } = useEditorStore();
 const { saving, level } = storeToRefs(useEditorStore());
 
 const upload = useTemplateRef("upload");
+const importInput = useTemplateRef("import");
 
 const display = useTemplateRef("display");
 
@@ -19,14 +20,19 @@ const text = ref("Select File");
 
 const disabled = ref(false);
 
-async function performUpload() {
+async function performUpload(input: HTMLInputElement) {
     disabled.value = true;
     try {
-        const file = upload.value!.files?.item(0);
-        if (!file || !file.type.startsWith("image/"))
+        const file = input.files?.item(0);
+        if (!file)
             return;
-        text.value = file.name;
-        level.value.image = await readBase64(file);
+        if (file.type.startsWith("image/")) {
+            level.value.image = await readBase64(file);
+            text.value = file.name;
+        } else if (file.type.startsWith("application/")) {
+            level.value = await loadLevel(file);
+            text.value = file.name;
+        }
     } catch (e) {
         console.error(e);
         alert((e as Error)?.message);
@@ -41,7 +47,8 @@ if (!window.matchMedia("(pointer: fine)"))
 
 <template>
     <h2>EDIT MODE</h2>
-    <input type="file" accept="image/*" id="upload" ref="upload" v-on:change="performUpload" :disabled>
+    <input type="file" accept="image/*" id="upload" ref="upload" v-on:change="performUpload(upload!)" :disabled>
+    <input type="file" accept="application/zip" id="import" ref="import" v-on:change="performUpload(importInput!)" :disabled>
     <LevelDisplay edit :level ref="display" />
     <div class="options">
         <ToolSelector tool="Move">⇆</ToolSelector>
@@ -51,6 +58,7 @@ if (!window.matchMedia("(pointer: fine)"))
         <ToolSelector tool="Delete">❌</ToolSelector>
     </div>
     <div class="options">
+        <label for="import" tabindex="0">Import Level</label>
         <label for="upload" tabindex="0">{{ text }}</label>
         <button v-on:click="text = 'Select File'; level = { image: '', frame: '' }">Clear</button>
         <SvgEditor />
@@ -61,11 +69,11 @@ if (!window.matchMedia("(pointer: fine)"))
 </template>
 
 <style scoped>
-#upload {
+input[type="file"] {
     display: none;
 }
 
-label[for="upload"] {
+label {
     background-color: aquamarine;
     justify-self: center;
 }

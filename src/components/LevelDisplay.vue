@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type Level from "../level.ts";
-import { ref, useTemplateRef } from "vue";
+import { onMounted, onUnmounted, ref, useTemplateRef } from "vue";
 import FrameEditor from "./FrameEditor.vue";
 
 const { level, edit } = defineProps<{ level: Level; edit?: boolean; }>();
@@ -12,23 +12,32 @@ const editor = useTemplateRef("editor");
 const width = ref(0);
 const height = ref(0);
 
+const radius = ref(160);
+
 function onLoaded() {
     if (!image.value)
         return;
     const rect = image.value.getBoundingClientRect();
+    radius.value = Math.floor(160 * Math.min(rect.width / rect.height));//TODO
     width.value = Math.floor(rect.width + 160);
     height.value = Math.floor(rect.height + 160);
 }
 
 defineExpose({ image, width, height, editor });
+
+onMounted(() => window.addEventListener("resize", onLoaded));
+onUnmounted(() => window.removeEventListener("resize", onLoaded));
 </script>
 
 <template>
     <div class="level">
         <img id="image" :src="level.image" alt="" draggable="false" v-on:load="onLoaded" ref="image">
-        <div id="editor" class="frame" v-if="edit" :style="`width: ${width}px; height: ${height}px;`">
-            <FrameEditor ref="editor" :width :height />
-        </div>
+        <template v-if="edit">
+            <div id="frame" class="frame" :style="`width: ${width - 1}px; height: ${height - 1}px;`"></div>
+            <div id="editor" class="frame" :style="`width: ${width}px; height: ${height}px;`">
+                <FrameEditor ref="editor" :width :height />
+            </div>
+        </template>
         <template v-else>
             <canvas class="frame" :width :height></canvas>
             <img class="frame" alt="" draggable="false" :src="level.frame" :width :height>
@@ -50,10 +59,9 @@ defineExpose({ image, width, height, editor });
     max-width: calc(90vw - 160px);
     pointer-events: none;
     z-index: 1;
-    user-select: none;
 }
 
-#editor {
+#frame {
     border: 1px solid gray;
 }
 
@@ -62,5 +70,9 @@ defineExpose({ image, width, height, editor });
     top: 50%;
     left: 50%;
     translate: -50% -50%;
+}
+
+img.frame {
+    opacity: 0.5;
 }
 </style>

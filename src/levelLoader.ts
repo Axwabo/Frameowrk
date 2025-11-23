@@ -15,7 +15,7 @@ export async function loadLevels(target: Level[]) {
     }
 }
 
-async function loadLevel(data: Promise<Blob>): Promise<Level> {
+export async function loadLevel(data: Blob | Promise<Blob>): Promise<Level> {
     const zip = await JSZip.loadAsync(data);
     const image = zip.files["image.png"];
     if (!image)
