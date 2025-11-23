@@ -34,6 +34,9 @@ async function performUpload() {
         disabled.value = false;
     }
 }
+
+if (!window.matchMedia("(pointer: fine)"))
+    alert("Editing is not supported on mobile devices");
 </script>
 
 <template>
@@ -41,11 +44,11 @@ async function performUpload() {
     <input type="file" accept="image/*" id="upload" ref="upload" v-on:change="performUpload" :disabled>
     <LevelDisplay edit :level ref="display" />
     <div class="options">
-        <ToolSelector tool="Select">👈</ToolSelector>
         <ToolSelector tool="Move">⇆</ToolSelector>
         <ToolSelector tool="Line">/</ToolSelector>
         <ToolSelector tool="Rect">□</ToolSelector>
         <ToolSelector tool="Circle">〇</ToolSelector>
+        <ToolSelector tool="Delete">❌</ToolSelector>
     </div>
     <div class="options">
         <label for="upload" tabindex="0">{{ text }}</label>

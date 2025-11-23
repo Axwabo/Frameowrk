@@ -54,7 +54,6 @@ defineExpose({ image, width, height, editor });
 }
 
 #editor {
-    box-sizing: border-box;
     border: 1px solid gray;
 }
 

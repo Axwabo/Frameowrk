@@ -9,7 +9,7 @@ const { currentTool } = storeToRefs(useEditorStore());
 </script>
 
 <template>
-    <button :class="{ active: tool === currentTool }" v-on:click="currentTool = tool">
+    <button :class="{ active: tool === currentTool }" v-on:click="currentTool = tool" :title="tool">
         <slot></slot>
     </button>
 </template>

@@ -17,8 +17,8 @@ async function createZip(element: HTMLImageElement, frame: string, width: number
     ctx.drawImage(element, 0, 0);
     const image = await canvas.convertToBlob();
     const zip = new JSZip();
-    zip.file("image.png", `<svg viewBox="0 0 ${width} ${height}">${image}</svg>`);
-    zip.file("frame.svg", frame);
+    zip.file("image.png", image);
+    zip.file("frame.svg", `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}">${frame}</svg>`);
     return await zip.generateAsync({ type: "blob" });
 }
 

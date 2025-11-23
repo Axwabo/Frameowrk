@@ -1,1 +1,1 @@
-export type Tool = "Select" | "Move" | "Line" | "Rect" | "Circle";
+export type Tool = "Move" | "Line" | "Rect" | "Circle" | "Delete";
