@@ -3,10 +3,12 @@ import { reactive } from "vue";
 import type Level from "./level.ts";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
+import type { Tool } from "./tool.ts";
 
 interface State {
     level: Level;
     saving: boolean;
+    currentTool: Tool;
 }
 
 async function createZip(element: HTMLImageElement, frame: string) {
@@ -26,7 +28,8 @@ const store = defineStore("editor", {
             image: "",
             frame: ""
         }),
-        saving: false
+        saving: false,
+        currentTool: "Line"
     }),
     actions: {
         async download(element: HTMLImageElement) {

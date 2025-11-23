@@ -4,6 +4,7 @@ import { ref, useTemplateRef } from "vue";
 import { readBase64 } from "../levelLoader.ts";
 import useEditorStore from "../editorStore.ts";
 import { storeToRefs } from "pinia";
+import ToolSelector from "./ToolSelector.vue";
 
 const { download } = useEditorStore();
 
@@ -38,7 +39,13 @@ async function performUpload() {
     <h2>EDIT MODE</h2>
     <input type="file" accept="image/*" id="upload" ref="upload" v-on:change="performUpload" :disabled>
     <LevelDisplay edit :level ref="display" />
-    <div><!--TODO--></div>
+    <div class="options">
+        <ToolSelector tool="Select">👈</ToolSelector>
+        <ToolSelector tool="Move">⇆</ToolSelector>
+        <ToolSelector tool="Line">/</ToolSelector>
+        <ToolSelector tool="Rect">□</ToolSelector>
+        <ToolSelector tool="Circle">〇</ToolSelector>
+    </div>
     <div class="options">
         <label for="upload" tabindex="0">{{ text }}</label>
         <button v-on:click="text = 'Select File'; level = { image: '', frame: '' }">Clear</button>
