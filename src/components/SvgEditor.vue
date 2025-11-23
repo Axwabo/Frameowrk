@@ -3,6 +3,8 @@ import { useTemplateRef } from "vue";
 import { storeToRefs } from "pinia";
 import useEditorStore from "../editorStore.ts";
 
+const { history } = useEditorStore();
+
 const { level } = storeToRefs(useEditorStore());
 
 const inputDialog = useTemplateRef("inputDialog");
@@ -12,7 +14,7 @@ const inputDialog = useTemplateRef("inputDialog");
     <button v-on:click="inputDialog!.showModal()">Edit SVG</button>
     <dialog ref="inputDialog">
         <button v-on:click="inputDialog!.close()">Close</button>
-        <textarea v-model="level.frame"></textarea>
+        <textarea v-model="level.frame" v-on:change="history.push(level.frame)"></textarea>
     </dialog>
 </template>
 

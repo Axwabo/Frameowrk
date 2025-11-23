@@ -9,6 +9,7 @@ interface State {
     level: Level;
     saving: boolean;
     currentTool: Tool;
+    history: string[];
 }
 
 async function createZip(element: HTMLImageElement, frame: string, width: number, height: number) {
@@ -29,7 +30,8 @@ const store = defineStore("editor", {
             frame: ""
         }),
         saving: false,
-        currentTool: "Line"
+        currentTool: "Line",
+        history: reactive([])
     }),
     actions: {
         async download(image: HTMLImageElement, frame: string, width: number, height: number) {

@@ -9,19 +9,19 @@ const { currentTool } = storeToRefs(useEditorStore());
 </script>
 
 <template>
-    <button :class="{ active: tool === currentTool }" v-on:click="currentTool = tool" :title="tool">
+    <button class="tool" :class="{ active: tool === currentTool }" v-on:click="currentTool = tool" :title="tool">
         <slot></slot>
     </button>
 </template>
 
-<style scoped>
-button {
+<style>
+.tool {
     padding: 0.2em;
     font-size: 1.25rem;
     width: 2em;
 }
 
-.active {
+.tool.active {
     background-color: greenyellow;
 }
 </style>

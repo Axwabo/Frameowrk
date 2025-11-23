@@ -6,6 +6,8 @@ import useWindowEvent from "../composables/useWindowEvent.ts";
 
 const { width, height } = defineProps<{ width: number, height: number; }>();
 
+const { history } = useEditorStore();
+
 const { level, currentTool } = storeToRefs(useEditorStore());
 
 const vector = useTemplateRef("vector");
@@ -93,8 +95,12 @@ function onMouseMove(ev: MouseEvent) {
 }
 
 function commit() {
-    level.value.frame = vector.value!.innerHTML;
+    const previous = level.value.frame;
+    const html = vector.value!.innerHTML;
+    level.value.frame = html;
     element = null;
+    if (previous !== html && history[history.length - 1] !== html)
+        history.push(previous);
 }
 
 useWindowEvent("mouseup", commit);

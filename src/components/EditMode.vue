@@ -7,7 +7,7 @@ import { storeToRefs } from "pinia";
 import ToolSelector from "./ToolSelector.vue";
 import SvgEditor from "./SvgEditor.vue";
 
-const { download } = useEditorStore();
+const { download, history } = useEditorStore();
 
 const { saving, level } = storeToRefs(useEditorStore());
 
@@ -40,6 +40,11 @@ async function performUpload(input: HTMLInputElement) {
         disabled.value = false;
     }
 }
+
+function undo() {
+    if (history.length)
+        level.value.frame = history.pop()!;
+}
 </script>
 
 <template>
@@ -53,6 +58,7 @@ async function performUpload(input: HTMLInputElement) {
         <ToolSelector tool="Rect">□</ToolSelector>
         <ToolSelector tool="Circle">〇</ToolSelector>
         <ToolSelector tool="Delete">❌</ToolSelector>
+        <button class="tool" title="Undo" :disabled="!history.length" v-on:click="undo">↩</button>
     </div>
     <div class="options">
         <label for="import" tabindex="0">Import Level</label>
