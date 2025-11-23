@@ -86,7 +86,14 @@ function onMouseMove(ev: MouseEvent) {
     const dy = ev.offsetY - startY;
     switch (currentTool.value) {
         case "Move":
-            transform(m => m.translateSelf(ev.movementX, ev.movementY, 0));
+            transform(m => {
+                const angle = Math.atan2(m.b, m.a);
+                const matrix = new DOMMatrix();
+                matrix.rotateSelf(angle);
+                const { x, y } = matrix.transformPoint({ x: ev.movementX, y: ev.movementY });
+                console.log(x, y, angle / 180 * Math.PI)
+                m.translateSelf(x, y, 0);
+            });
             break;
         case "Line":
             element.setAttributeNS(null, "d", `M${startX} ${startY} L${ev.offsetX} ${ev.offsetY}`);
