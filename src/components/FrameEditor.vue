@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import useEditorStore from "../editorStore.ts";
-import { onMounted, onUnmounted, useTemplateRef } from "vue";
+import { useTemplateRef } from "vue";
+import useWindowEvent from "../composables/useWindowEvent.ts";
 
 const { width, height } = defineProps<{ width: number, height: number; }>();
 
@@ -96,8 +97,7 @@ function commit() {
     element = null;
 }
 
-onMounted(() => window.addEventListener("mouseup", commit));
-onUnmounted(() => window.removeEventListener("mouseup", commit));
+useWindowEvent("mouseup", commit);
 </script>
 
 <template>

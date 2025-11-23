@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import type Level from "../level.ts";
-import { onMounted, onUnmounted, ref, useTemplateRef } from "vue";
+import { ref, useTemplateRef } from "vue";
 import FrameEditor from "./FrameEditor.vue";
+import useWindowEvent from "../composables/useWindowEvent.ts";
 
 const { level, edit } = defineProps<{ level: Level; edit?: boolean; }>();
 
 const image = useTemplateRef("image");
 
 const editor = useTemplateRef("editor");
+
+const drawingCanvas = useTemplateRef("drawingCanvas");
 
 const width = ref(0);
 const height = ref(0);
@@ -23,10 +26,9 @@ function onLoaded() {
     height.value = Math.floor(rect.height + 160);
 }
 
-defineExpose({ image, width, height, editor });
+defineExpose({ image, width, height, editor, drawingCanvas });
 
-onMounted(() => window.addEventListener("resize", onLoaded));
-onUnmounted(() => window.removeEventListener("resize", onLoaded));
+useWindowEvent("resize", onLoaded);
 </script>
 
 <template>
@@ -39,7 +41,7 @@ onUnmounted(() => window.removeEventListener("resize", onLoaded));
             </div>
         </template>
         <template v-else>
-            <canvas class="frame" :width :height></canvas>
+            <canvas class="frame" ref="drawingCanvas" :width :height></canvas>
             <img class="frame" alt="" draggable="false" :src="level.frame" :width :height>
         </template>
     </div>

@@ -6,13 +6,15 @@ interface State {
     levels: Level[];
     levelIndex: number;
     completionScores: number[];
+    attempt: number;
 }
 
 const store = defineStore("game", {
     state: (): State => ({
         levels: shallowReactive([]),
         levelIndex: 0,
-        completionScores: shallowReactive([])
+        completionScores: shallowReactive([]),
+        attempt: 0
     })
 });
 
