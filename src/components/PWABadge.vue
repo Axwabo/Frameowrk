@@ -109,6 +109,7 @@ function close() {
     margin-right: 5px;
     border-radius: 2px;
     padding: 3px 10px;
+    color: white;
 }
 
 .pwa-toast button.reload {
