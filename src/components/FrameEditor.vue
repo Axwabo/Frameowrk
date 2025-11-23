@@ -33,13 +33,16 @@ function append(tag: keyof SVGElementTagNameMap) {
     const newElement = document.createElementNS("http://www.w3.org/2000/svg", tag);
     newElement.setAttribute("stroke", "black");
     newElement.setAttribute("stroke-width", "3");
+    newElement.setAttribute("transform-origin", `${startX.toFixed(0)} ${startY.toFixed(0)}`);
     vector.value!.append(newElement);
     element = newElement;
     return newElement;
 }
 
-function getMatrix() {
-    return new DOMMatrix(getComputedStyle(element!).transform);
+function transform(modify: (matrix: DOMMatrix) => void) {
+    const matrix = new DOMMatrix(getComputedStyle(element!).transform);
+    modify(matrix);
+    element?.setAttributeNS(null, "transform", matrix.toString());
 }
 
 function onMouseDown(ev: MouseEvent) {
@@ -47,6 +50,7 @@ function onMouseDown(ev: MouseEvent) {
     startY = ev.offsetY;
     switch (currentTool.value) {
         case "Move":
+        case "Rotate":
             const svg = ev.target as SVGElement;
             if (svg.tagName !== "svg")
                 element = svg;
@@ -77,9 +81,7 @@ function onMouseMove(ev: MouseEvent) {
     const dy = ev.offsetY - startY;
     switch (currentTool.value) {
         case "Move":
-            const matrix = getMatrix();
-            matrix.translateSelf(ev.movementX, ev.movementY, 0);
-            element.setAttributeNS(null, "transform", matrix.toString());
+            transform(m => m.translateSelf(ev.movementX, ev.movementY, 0));
             break;
         case "Line":
             element.setAttributeNS(null, "d", `M${startX} ${startY} L${ev.offsetX} ${ev.offsetY}`);
@@ -94,6 +96,9 @@ function onMouseMove(ev: MouseEvent) {
             break;
         case "Circle":
             element.setAttributeNS(null, "r", Math.sqrt(dx * dx + dy * dy).toFixed(0));
+            break;
+        case "Rotate":
+            transform(m => m.rotateSelf(0, 0, ev.movementX));
             break;
     }
 }
@@ -132,8 +137,20 @@ useWindowEvent("mouseup", commit);
     cursor: move;
 }
 
-#editorSVG.move:active {
+#editorSVG.move:has(:active) {
     cursor: move;
+}
+
+#editorSVG.rotate * {
+    cursor: grab;
+}
+
+#editorSVG.rotate *:active {
+    cursor: grabbing;
+}
+
+#editorSVG.rotate:has(:active) {
+    cursor: grabbing;
 }
 
 #editorSVG.delete * {
