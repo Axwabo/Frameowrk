@@ -20,19 +20,23 @@ function onLoaded() {
 
 <template>
     <div class="level">
-        <img id="image" :src="level.image" alt="" v-on:load="onLoaded" ref="image">
+        <img id="image" :src="level.image" alt="" draggable="false" v-on:load="onLoaded" ref="image">
         <canvas class="frame" :width :height></canvas>
-        <img class="frame" alt="" :src="level.frame" :width :height>
+        <img class="frame" alt="" draggable="false" :src="level.frame" :width :height>
     </div>
 </template>
 
 <style scoped>
 .level {
     position: relative;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
 }
 
 #image {
-    max-height: calc(50vh);
+    max-height: calc(100% - 160px);
     max-width: calc(90vw - 160px);
 }
 

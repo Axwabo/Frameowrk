@@ -1,24 +1,17 @@
 <script setup lang="ts">
 import useGameStore from "../gameStore.ts";
-import base from "../base.ts";
-import loadLevel from "../levelLoader.ts";
+import { loadLevels } from "../levelLoader.ts";
 import LevelDisplay from "./LevelDisplay.vue";
+import { storeToRefs } from "pinia";
 
 const { levels } = useGameStore();
 
-const builtInLevelCount = 1;
+const { levelIndex } = storeToRefs(useGameStore());
 
-for (let i = 0; i < builtInLevelCount; i++) {
-    const level = await fetch(`${base}levels/${i + 1}.zip`);
-    if (level.ok)
-        levels.push(await loadLevel(level.blob()));
-}
+await loadLevels(levels);
 </script>
 
 <template>
+    <h2>Level {{ levelIndex + 1 }}</h2>
     <LevelDisplay :level="levels[0]!" />
 </template>
-
-<style scoped>
-
-</style>

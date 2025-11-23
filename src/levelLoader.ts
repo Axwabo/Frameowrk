@@ -1,7 +1,21 @@
 import JSZip from "jszip";
 import type Level from "./level.ts";
+import base from "./base.ts";
 
-export default async function loadLevel(data: Promise<Blob>): Promise<Level> {
+const builtInLevelCount = 1;
+
+export async function loadLevels(target: Level[]) {
+    if (target.length !== 0)
+        return;
+
+    for (let i = 0; i < builtInLevelCount; i++) {
+        const level = await fetch(`${base}levels/${i + 1}.zip`);
+        if (level.ok)
+            target.push(await loadLevel(level.blob()));
+    }
+}
+
+async function loadLevel(data: Promise<Blob>): Promise<Level> {
     const zip = await JSZip.loadAsync(data);
     const image = zip.files["image.png"];
     if (!image)
