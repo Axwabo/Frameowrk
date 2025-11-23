@@ -27,8 +27,8 @@ await loadLevels(levels);
 useAnimationFrame(() => {
     const previousTop = top;
     const previousLeft = left;
-    top = car.value!.top + Math.cos(car.value!.angle) * 50;
-    left = car.value!.left - Math.sin(car.value!.angle) * 50;
+    top = car.value!.top - Math.cos(car.value!.angle) * 50;
+    left = car.value!.left + Math.sin(car.value!.angle) * 50;
     if (!mouseDown)
         return;
     const canvas = display.value!.drawingCanvas!;
