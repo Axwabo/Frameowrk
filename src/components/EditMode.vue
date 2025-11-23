@@ -40,9 +40,6 @@ async function performUpload(input: HTMLInputElement) {
         disabled.value = false;
     }
 }
-
-if (!window.matchMedia("(pointer: fine)"))
-    alert("Editing is not supported on mobile devices");
 </script>
 
 <template>

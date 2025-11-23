@@ -1,13 +1,22 @@
 <script setup lang="ts">
 const emit = defineEmits([ "play", "edit" ]);
+
+const editingSupported = window.matchMedia("(pointer: fine)").matches;
+
+function tryEdit() {
+    if (editingSupported)
+        emit("edit");
+    else
+        alert("Editing is not supported on mobile devices");
+}
 </script>
 
 <template>
     <footer>
         <input type="radio" name="mode" id="playMode" checked v-on:input="emit('play')">
         <label for="playMode" tabindex="0">Play</label>
-        <input type="radio" name="mode" id="editMode" v-on:input="emit('edit')">
-        <label for="editMode" tabindex="0">Edit</label>
+        <input type="radio" name="mode" id="editMode" v-on:input="tryEdit" :disabled="!editingSupported">
+        <label for="editMode" tabindex="0" v-on:click="tryEdit">Edit</label>
     </footer>
 </template>
 
