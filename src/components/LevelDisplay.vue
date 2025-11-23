@@ -49,6 +49,8 @@ defineExpose({ image, width, height, editor });
     max-height: calc(100% - 160px);
     max-width: calc(90vw - 160px);
     pointer-events: none;
+    z-index: 1;
+    user-select: none;
 }
 
 #editor {
@@ -61,6 +63,5 @@ defineExpose({ image, width, height, editor });
     top: 50%;
     left: 50%;
     translate: -50% -50%;
-    z-index: -1;
 }
 </style>

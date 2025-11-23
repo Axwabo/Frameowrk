@@ -12,16 +12,24 @@ const vector = useTemplateRef("vector");
 defineExpose({ vector });
 
 function onClick(ev: Event) {
+    if (currentTool.value !== "Select")
+        return;
     const target = ev.target as SVGElement;
-    console.log(target)
-    /*TODO*/
+    document.querySelector(".selected")?.classList.remove("selected");
+    target.classList.add("selected");
 }
 </script>
 
 <template>
-    <svg v-html="level.frame" ref="vector" v-on:click="onClick" :width :height :viewBox="`0 0 ${width} ${height}`"></svg>
+    <svg id="editorSVG" v-html="level.frame" ref="vector" v-on:click="onClick" :width :height :viewBox="`0 0 ${width} ${height}`"></svg>
 </template>
 
-<style scoped>
+<style>
+#editorSVG {
+    z-index: 1;
+}
 
+.selected:not(svg) {
+    fill: rgba(100, 100, 0);
+}
 </style>
