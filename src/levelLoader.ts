@@ -28,3 +28,15 @@ async function loadLevel(data: Promise<Blob>): Promise<Level> {
         frame: `data:image/svg+xml;base64,${await svg.async("base64")}`
     };
 }
+
+export async function swapImage(file: Blob, currentLevel: Level) {
+    const reader = new FileReader();
+    await new Promise((resolve, reject) => {
+        reader.addEventListener("load", resolve);
+        reader.addEventListener("error", reject);
+        reader.readAsDataURL(file);
+    });
+    const image = reader.result as string;
+    const newLevel = { image, frame: currentLevel.frame };
+    return newLevel;
+}

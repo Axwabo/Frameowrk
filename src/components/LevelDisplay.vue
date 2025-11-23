@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type Level from "../level.ts";
 import { ref, useTemplateRef } from "vue";
+import FrameEditor from "./FrameEditor.vue";
 
-const { level } = defineProps<{ level: Level; }>();
+const { level, edit } = defineProps<{ level: Level; edit?: boolean; }>();
 
 const image = useTemplateRef("image");
 
@@ -13,16 +14,21 @@ function onLoaded() {
     if (!image.value)
         return;
     const rect = image.value.getBoundingClientRect();
-    width.value = rect.width + 160;
-    height.value = rect.height + 160;
+    width.value = Math.floor(rect.width + 160);
+    height.value = Math.floor(rect.height + 160);
 }
 </script>
 
 <template>
     <div class="level">
         <img id="image" :src="level.image" alt="" draggable="false" v-on:load="onLoaded" ref="image">
-        <canvas class="frame" :width :height></canvas>
-        <img class="frame" alt="" draggable="false" :src="level.frame" :width :height>
+        <div id="editor" class="frame" v-if="edit" :style="`width: ${width}px; height: ${height}px;`">
+            <FrameEditor />
+        </div>
+        <template v-else>
+            <canvas class="frame" :width :height></canvas>
+            <img class="frame" alt="" draggable="false" :src="level.frame" :width :height>
+        </template>
     </div>
 </template>
 
@@ -33,6 +39,7 @@ function onLoaded() {
     flex: 1;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
 #image {

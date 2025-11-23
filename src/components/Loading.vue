@@ -1,4 +1,5 @@
 <template>
+    <div></div>
     <progress class="loading" />
 </template>
 
