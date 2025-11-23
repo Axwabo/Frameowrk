@@ -28,7 +28,6 @@ label {
     background-color: lightgray;
     font-weight: bold;
     font-size: 1.5rem;
-    cursor: pointer;
 }
 
 input:checked + label {
