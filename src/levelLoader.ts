@@ -29,14 +29,13 @@ async function loadLevel(data: Promise<Blob>): Promise<Level> {
     };
 }
 
-export async function swapImage(file: Blob, currentLevel: Level) {
+export async function readBase64(file: Blob) {
     const reader = new FileReader();
     await new Promise((resolve, reject) => {
         reader.addEventListener("load", resolve);
         reader.addEventListener("error", reject);
         reader.readAsDataURL(file);
     });
-    const image = reader.result as string;
-    const newLevel = { image, frame: currentLevel.frame };
-    return newLevel;
+    return reader.result as string;
+
 }
