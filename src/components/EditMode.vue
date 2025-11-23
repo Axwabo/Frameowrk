@@ -30,10 +30,11 @@ async function performUpload() {
 </script>
 
 <template>
+    <h2>EDIT MODE</h2>
     <input type="file" accept="image/*" id="upload" ref="upload" v-on:change="performUpload" :disabled>
-    <label for="upload" tabindex="0">{{ text }}</label>
     <LevelDisplay edit :level />
     <button>a</button>
+    <label for="upload" tabindex="0">{{ text }}</label>
     <!--  TODO   -->
 </template>
 
