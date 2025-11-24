@@ -4,6 +4,8 @@ A browser game (PWA) where you control a cat with a mouse to draw frames for pic
 
 You can install it to work offline!
 
+As far as gameplay goes, it might not be as fun as editing the levels.
+
 # Gameplay
 
 There are a few levels built-in. Each level has an image (PNG) and a frame (SVG).
@@ -21,17 +23,27 @@ The cat will move faster if it's farther from the mouse, and slower if it's clos
 > Resolution changes are not yet handled properly, and might also cause issues
 > if loading a level made for an aspect ratio different from the current one.
 
-Images were sourced from Pixabay (via pexels.com)
+Images were sourced from pexels.com, authors:
+
+- Pixabay
+- EVG Kowalievska
+- Vladim B
+- Marko Blazevic
+- Cats Coming
+- Peng Louis
+- Septimiu Lupea
+- Katarzyna Modrzejewska
 
 # Editor
 
 The editor can be used to create new levels, which can be exported and/or saved to the cache.
 
-SVG tools are the following:
+The tools are basic but can be combined for amazing effects
 
 - Move (translate object)
 - Line
-- Rectangle
+- Rect
+- Ellipse
 - Circle
 - Circumference (turn circle into arc)
 - Rotate
