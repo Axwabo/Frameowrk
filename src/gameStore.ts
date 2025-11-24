@@ -9,7 +9,7 @@ interface State {
     attempt: number;
     mouseX: number;
     mouseY: number;
-    submitted: boolean;
+    paused: boolean;
 }
 
 const store = defineStore("game", {
@@ -20,7 +20,7 @@ const store = defineStore("game", {
         attempt: 0,
         mouseX: 0,
         mouseY: 0,
-        submitted: false
+        paused: false
     })
 });
 

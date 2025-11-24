@@ -11,7 +11,7 @@ import useWindowEvent from "../composables/useWindowEvent.ts";
 
 const { levels } = useGameStore();
 
-const { levelIndex, attempt, mouseX, mouseY, submitted } = storeToRefs(useGameStore());
+const { levelIndex, attempt, mouseX, mouseY, paused } = storeToRefs(useGameStore());
 
 const display = useTemplateRef("display");
 
@@ -27,13 +27,13 @@ await loadLevels(levels);
 useAnimationFrame(() => {
     const previousTop = top;
     const previousLeft = left;
-    top = car.value!.top - Math.cos(car.value!.angle) * 50;
-    left = car.value!.left + Math.sin(car.value!.angle) * 50;
-    if (!mouseDown || submitted.value)
+    top = car.value!.top - Math.cos(car.value!.angle) * 40;
+    left = car.value!.left + Math.sin(car.value!.angle) * 40;
+    if (!mouseDown || paused.value)
         return;
     const canvas = display.value!.drawingCanvas!;
     const { x, y } = canvas.getBoundingClientRect();
-    const ctx = canvas.getContext("2d")!;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
     ctx.lineWidth = 3;
     ctx.strokeStyle = "black";
     ctx.beginPath();
@@ -44,24 +44,58 @@ useAnimationFrame(() => {
 
 watch(attempt, () => display.value?.drawingCanvas?.getContext("2d")?.clearRect(0, 0, Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER));
 
-watch(submitted, async value => {
-    if (!value)
-        return;
+async function getOriginalData() {
+    const canvas = new OffscreenCanvas(display.value!.width, display.value!.height);
+    const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
+    const frame = display.value!.frameImage!;
+    const image = new Image(canvas.width, canvas.height);
+    const promise = new Promise(resolve => image.addEventListener("load", resolve));
+    image.src = frame.src;
+    await promise;
+    ctx.drawImage(image, 0, 0);
+    return ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+}
+
+async function submit() {
+    const width = display.value!.width;
+    const height = display.value!.height;
+    const originalData = await getOriginalData();
+    const drawnData = display.value!.drawingCanvas!.getContext("2d", { willReadFrequently: true })!.getImageData(0, 0, width, height).data;
+    let totalPixels = 0;
+    let deviation = 0;
+    for (let y = 0; y < 80; y++)
+        for (let x = 0; x < width; x++) {
+            compare(x, y);
+            compare(x, height - y - 1);
+        }
+
+    for (let y = 80; y < height - 80; y++)
+        for (let x = 0; x < 80; x++) {
+            compare(x, y);
+            compare(width - x - 1, y);
+        }
+
+    function compare(x: number, y: number) {
+        const px = x * width + y;
+        if (originalData[px + 3])
+            totalPixels++;
+        if (!!originalData[px + 3] !== !!drawnData[px + 3])
+            deviation++;
+    }
+
+    const percentage = Math.max(0, Math.min(100, 100 - (deviation / totalPixels - 1) * 100));
+    alert(percentage)
+}
+
+async function screenshot() {
     const canvas = new OffscreenCanvas(display.value!.width, display.value!.height);
     const ctx = canvas.getContext("2d")!;
-    const frame = display.value!.frameImage!;
-    const response = await fetch(frame.src);
-    const text = await response.text();
-    const div = document.createElement("div");
-    div.innerHTML = text;
-    const svg = div.querySelector("svg");
-    if (!svg)
-        return;
-    svg.setAttributeNS(null, "width", canvas.width.toFixed(0));
-    svg.setAttributeNS(null, "height", canvas.height.toFixed(0));
-    ctx.drawImage(svg, 0, 0);
-    canvas.convertToBlob().then(e => open(URL.createObjectURL(e)))
-});
+    ctx.drawImage(display.value!.drawingCanvas!, 0, 0);
+    const image = display.value!.image!;
+    ctx.drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight, 80, 80, canvas.width - 160, canvas.height - 160);
+    const blob = await canvas.convertToBlob();
+    open(URL.createObjectURL(blob));
+}
 
 useWindowEvent("mousedown", () => mouseDown = true);
 useWindowEvent("mouseup", () => mouseDown = false);
@@ -79,5 +113,5 @@ useWindowEvent("touchmove", ev => {
     <h2>Level {{ levelIndex + 1 }}</h2>
     <LevelDisplay :level="levels[levelIndex]!" ref="display" />
     <Cat :key="attempt" ref="car" />
-    <LevelFooter />
+    <LevelFooter v-on:submit="submit" v-on:screenshot="screenshot" />
 </template>
