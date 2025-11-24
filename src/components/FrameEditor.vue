@@ -65,6 +65,12 @@ function onMouseDown(ev: MouseEvent) {
             rect.setAttribute("y", startY.toFixed(0));
             rect.setAttribute("fill", "none");
             break;
+        case "Ellipse":
+            const ellipse = append("ellipse");
+            ellipse.setAttribute("cx", startX.toFixed(0));
+            ellipse.setAttribute("cy", startY.toFixed(0));
+            ellipse.setAttribute("fill", "none");
+            break;
         case "Circumference":
             const selectedCircle = ev.target as SVGElement;
             if (selectedCircle.tagName === "circle")
@@ -99,6 +105,19 @@ function onMouseMove(ev: MouseEvent) {
             if (dy < 0)
                 element.setAttributeNS(null, "y", ev.offsetY.toFixed(0));
             break;
+        case "Ellipse":
+            element.setAttributeNS(null, "rx", Math.abs(dx).toFixed(0));
+            element.setAttributeNS(null, "ry", Math.abs(dy).toFixed(0));
+            if (dx < 0)
+                element.setAttributeNS(null, "x", ev.offsetX.toFixed(0));
+            if (dy < 0)
+                element.setAttributeNS(null, "y", ev.offsetY.toFixed(0));
+            break;
+        case "Circle":
+            const radius = Math.round(Math.sqrt(dx * dx + dy * dy));
+            element.setAttributeNS(null, "r", radius.toString());
+            element.setAttributeNS(null, "stroke-dasharray", (radius * 2 * Math.PI).toString());
+            break;
         case "Circumference":
             const rawOffset = element.getAttributeNS(null, "stroke-dashoffset");
             const offset = rawOffset ? parseFloat(rawOffset) : 0;
@@ -107,11 +126,6 @@ function onMouseMove(ev: MouseEvent) {
                 element.setAttributeNS(null, "stroke-dashoffset", newOffset + "%");
             else
                 element.removeAttributeNS(null, "stroke-dashoffset");
-            break;
-        case "Circle":
-            const radius = Math.round(Math.sqrt(dx * dx + dy * dy));
-            element.setAttributeNS(null, "r", radius.toString());
-            element.setAttributeNS(null, "stroke-dasharray", (radius * 2 * Math.PI).toString());
             break;
         case "Rotate":
             transform(m => m.rotateSelf(0, 0, ev.movementX));

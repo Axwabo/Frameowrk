@@ -61,6 +61,7 @@ useWindowEvent("paste", ev => performUpload(ev.clipboardData?.files[0]));
         <ToolSelector tool="Move">⇆</ToolSelector>
         <ToolSelector tool="Line">/</ToolSelector>
         <ToolSelector tool="Rect">□</ToolSelector>
+        <ToolSelector tool="Ellipse">⬭</ToolSelector>
         <ToolSelector tool="Circle">〇</ToolSelector>
         <ToolSelector tool="Circumference">⤵</ToolSelector>
         <ToolSelector tool="Rotate">🔄</ToolSelector>
