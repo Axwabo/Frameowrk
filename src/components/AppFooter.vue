@@ -16,11 +16,11 @@ function tryEdit() {
 
 <template>
     <footer>
-        <input type="radio" name="mode" id="playMode" checked v-on:input="view = 'Play'">
+        <input type="radio" name="mode" id="playMode" :checked="view === 'Play'" v-on:input="view = 'Play'">
         <label for="playMode" tabindex="0">Play</label>
-        <input type="radio" name="mode" id="levelsMode" v-on:input="view = 'Levels'">
+        <input type="radio" name="mode" id="levelsMode" :checked="view === 'Levels'" v-on:input="view = 'Levels'">
         <label for="levelsMode" tabindex="0">Levels</label>
-        <input type="radio" name="mode" id="editMode" v-on:input="tryEdit" :disabled="!editingSupported">
+        <input type="radio" name="mode" id="editMode" :checked="view === 'Edit'" v-on:input="tryEdit" :disabled="!editingSupported">
         <label for="editMode" tabindex="0" v-on:click="tryEdit">Edit</label>
     </footer>
 </template>
