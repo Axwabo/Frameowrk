@@ -4,6 +4,7 @@ import type Level from "./level.ts";
 
 interface State {
     levels: Level[];
+    customLevels: Map<string, Level>;
     levelIndex: number;
     completionScores: number[];
     attempt: number;
@@ -15,6 +16,7 @@ interface State {
 const store = defineStore("game", {
     state: (): State => ({
         levels: shallowReactive([]),
+        customLevels: shallowReactive(new Map<string, Level>()),
         levelIndex: 0,
         completionScores: shallowReactive([]),
         attempt: 0,

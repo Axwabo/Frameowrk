@@ -34,6 +34,22 @@ const store = defineStore("editor", {
         history: reactive([])
     }),
     actions: {
+        async cache(image: HTMLImageElement, frame: string, width: number, height: number) {
+            const name = prompt("Enter name of custom level");
+            if (!name)
+                return;
+            this.saving = true;
+            try {
+                const cache = await caches.open("CustomLevels");
+                const blob = await createZip(image, frame, width, height);
+                await cache.put(`/${name}`, new Response(blob));
+            } catch (e) {
+                console.error(e);
+                alert("Couldn't download level: " + (e as Error)?.message);
+            } finally {
+                this.saving = false;
+            }
+        },
         async download(image: HTMLImageElement, frame: string, width: number, height: number) {
             this.saving = true;
             try {

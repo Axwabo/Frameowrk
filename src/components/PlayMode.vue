@@ -9,7 +9,7 @@ import { useTemplateRef, watch } from "vue";
 import useAnimationFrame from "../composables/useAnimationFrame.ts";
 import useWindowEvent from "../composables/useWindowEvent.ts";
 
-const { levels } = useGameStore();
+const { levels, customLevels } = useGameStore();
 
 const { levelIndex, attempt, mouseX, mouseY, paused } = storeToRefs(useGameStore());
 
@@ -22,7 +22,7 @@ let left = 0;
 
 let mouseDown = false;
 
-await loadLevels(levels);
+await loadLevels(levels, customLevels);
 
 useAnimationFrame(() => {
     const previousTop = top;
