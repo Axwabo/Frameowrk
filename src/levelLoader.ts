@@ -4,7 +4,7 @@ import base from "./base.ts";
 
 export const builtInLevelCount = 1;
 
-export async function loadLevels(target: Level[], custom: Map<string, Level>) {
+export async function loadLevels(target: Level[], custom: Map<Level, string>) {
     if (target.length !== 0)
         return;
     for (let i = 0; i < builtInLevelCount; i++) {
@@ -17,8 +17,11 @@ export async function loadLevels(target: Level[], custom: Map<string, Level>) {
     for (const key of keys) {
         const url = new URL(key.url);
         const response = await cache.match(key);
-        if (response)
-            custom.set(decodeURI(url.pathname.substring(1)), await loadLevel(response.blob()));
+        if (!response)
+            continue;
+        const level = await loadLevel(response.blob());
+        custom.set(level, decodeURI(url.pathname.substring(1)));
+        target.push(level);
     }
 }
 

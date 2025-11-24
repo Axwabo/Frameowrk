@@ -1,11 +1,14 @@
 <script setup lang="ts">
-const emit = defineEmits([ "play", "edit" ]);
+import useEditorStore from "../editorStore.ts";
+import { storeToRefs } from "pinia";
+
+const { view } = storeToRefs(useEditorStore());
 
 const editingSupported = window.matchMedia("(pointer: fine)").matches;
 
 function tryEdit() {
     if (editingSupported)
-        emit("edit");
+        view.value = "Edit";
     else
         alert("Editing is not supported on mobile devices");
 }
@@ -13,8 +16,10 @@ function tryEdit() {
 
 <template>
     <footer>
-        <input type="radio" name="mode" id="playMode" checked v-on:input="emit('play')">
+        <input type="radio" name="mode" id="playMode" checked v-on:input="view = 'Play'">
         <label for="playMode" tabindex="0">Play</label>
+        <input type="radio" name="mode" id="levelsMode" v-on:input="view = 'Levels'">
+        <label for="levelsMode" tabindex="0">Levels</label>
         <input type="radio" name="mode" id="editMode" v-on:input="tryEdit" :disabled="!editingSupported">
         <label for="editMode" tabindex="0" v-on:click="tryEdit">Edit</label>
     </footer>

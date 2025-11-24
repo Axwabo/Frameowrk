@@ -4,12 +4,14 @@ import type Level from "./level.ts";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import type { Tool } from "./tool.ts";
+import type { View } from "./view.ts";
 
 interface State {
     level: Level;
     saving: boolean;
     currentTool: Tool;
     history: string[];
+    view: View;
 }
 
 async function createZip(element: HTMLImageElement, frame: string, width: number, height: number) {
@@ -31,7 +33,8 @@ const store = defineStore("editor", {
         }),
         saving: false,
         currentTool: "Line",
-        history: reactive([])
+        history: reactive([]),
+        view: "Play"
     }),
     actions: {
         async cache(image: HTMLImageElement, frame: string, width: number, height: number) {

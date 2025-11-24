@@ -25,6 +25,9 @@ The cat will move faster if it's farther from the mouse, and slower if it's clos
 
 The editor can be used to create new levels, which can be exported and/or saved to the cache.
 
+> [!NOTE]
+> For cached levels to show up in the levels list, reload the page.
+
 SVG tools are the following:
 
 - Move (translate object)
