@@ -27,9 +27,6 @@ Images were sourced from Pixabay (via pexels.com)
 
 The editor can be used to create new levels, which can be exported and/or saved to the cache.
 
-> [!NOTE]
-> For cached levels to show up in the levels list, reload the page.
-
 SVG tools are the following:
 
 - Move (translate object)
@@ -46,6 +43,9 @@ You can also edit the contents of the SVG frame by clicking "Edit SVG"
 > [!NOTE]
 > Moving a rotated object moves the object the way it's oriented instead of relative to the canvas.
 > This is because I couldn't figure out the math.
+
+> [!TIP]
+> You can paste images or level ZIPs into the editor.
 
 # Frameworks & Libraries
 

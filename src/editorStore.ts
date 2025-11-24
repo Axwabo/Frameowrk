@@ -5,6 +5,7 @@ import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import type { Tool } from "./tool.ts";
 import type { View } from "./view.ts";
+import { loadLevel } from "./levelLoader.ts";
 
 interface State {
     level: Level;
@@ -37,7 +38,7 @@ const store = defineStore("editor", {
         view: "Play"
     }),
     actions: {
-        async cache(image: HTMLImageElement, frame: string, width: number, height: number) {
+        async cache(image: HTMLImageElement, frame: string, width: number, height: number, levels: Level[], customLevels: Map<Level, string>) {
             const name = prompt("Enter name of custom level");
             if (!name)
                 return;
@@ -46,6 +47,9 @@ const store = defineStore("editor", {
                 const cache = await caches.open("CustomLevels");
                 const blob = await createZip(image, frame, width, height);
                 await cache.put(`/${name}`, new Response(blob));
+                const level = await loadLevel(blob);
+                levels.push(level);
+                customLevels.set(level, name);
             } catch (e) {
                 console.error(e);
                 alert("Couldn't download level: " + (e as Error)?.message);

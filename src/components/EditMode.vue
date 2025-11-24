@@ -7,8 +7,11 @@ import { storeToRefs } from "pinia";
 import ToolSelector from "./ToolSelector.vue";
 import SvgEditor from "./SvgEditor.vue";
 import useWindowEvent from "../composables/useWindowEvent.ts";
+import useGameStore from "../gameStore.ts";
 
 const { cache, download, history } = useEditorStore();
+
+const { levels, customLevels } = useGameStore();
 
 const { saving, level } = storeToRefs(useEditorStore());
 
@@ -72,7 +75,7 @@ useWindowEvent("paste", ev => performUpload(ev.clipboardData?.files[0]));
         <button v-on:click="download(display!.image!, display!.editor!.vector!.innerHTML, display!.width, display!.height)"
                 :disabled="saving || !level.image || !level.frame">Download
         </button>
-        <button v-on:click="cache(display!.image!, display!.editor!.vector!.innerHTML, display!.width, display!.height)"
+        <button v-on:click="cache(display!.image!, display!.editor!.vector!.innerHTML, display!.width, display!.height, levels, customLevels)"
                 :disabled="saving || !level.image || !level.frame">Cache
         </button>
     </div>
