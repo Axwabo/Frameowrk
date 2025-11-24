@@ -21,6 +21,8 @@ The cat will move faster if it's farther from the mouse, and slower if it's clos
 > Resolution changes are not yet handled properly, and might also cause issues
 > if loading a level made for an aspect ratio different from the current one.
 
+Images were sourced from Pixabay (via pexels.com)
+
 # Editor
 
 The editor can be used to create new levels, which can be exported and/or saved to the cache.
