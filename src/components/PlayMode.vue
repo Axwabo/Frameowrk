@@ -44,49 +44,6 @@ useAnimationFrame(() => {
 
 watch(attempt, () => display.value?.drawingCanvas?.getContext("2d")?.clearRect(0, 0, Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER));
 
-async function getOriginalData() {
-    const canvas = new OffscreenCanvas(display.value!.width, display.value!.height);
-    const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
-    const frame = display.value!.frameImage!;
-    const image = new Image(canvas.width, canvas.height);
-    const promise = new Promise(resolve => image.addEventListener("load", resolve));
-    image.src = frame.src;
-    await promise;
-    ctx.drawImage(image, 0, 0);
-    return ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-}
-
-async function submit() {
-    const width = display.value!.width;
-    const height = display.value!.height;
-    const originalData = await getOriginalData();
-    const drawnData = display.value!.drawingCanvas!.getContext("2d", { willReadFrequently: true })!.getImageData(0, 0, width, height).data;
-    let totalPixels = 0;
-    let deviation = 0;
-    for (let y = 0; y < 80; y++)
-        for (let x = 0; x < width; x++) {
-            compare(x, y);
-            compare(x, height - y - 1);
-        }
-
-    for (let y = 80; y < height - 80; y++)
-        for (let x = 0; x < 80; x++) {
-            compare(x, y);
-            compare(width - x - 1, y);
-        }
-
-    function compare(x: number, y: number) {
-        const px = x * width + y;
-        if (originalData[px + 3])
-            totalPixels++;
-        if (!!originalData[px + 3] !== !!drawnData[px + 3])
-            deviation++;
-    }
-
-    const percentage = Math.max(0, Math.min(100, 100 - (deviation / totalPixels - 1) * 100));
-    alert(percentage)
-}
-
 async function screenshot() {
     const canvas = new OffscreenCanvas(display.value!.width, display.value!.height);
     const ctx = canvas.getContext("2d")!;
@@ -113,5 +70,5 @@ useWindowEvent("touchmove", ev => {
     <h2>Level {{ levelIndex + 1 }}</h2>
     <LevelDisplay :level="levels[levelIndex]!" ref="display" />
     <Cat :key="attempt" ref="car" />
-    <LevelFooter v-on:submit="submit" v-on:screenshot="screenshot" />
+    <LevelFooter v-on:screenshot="screenshot" />
 </template>

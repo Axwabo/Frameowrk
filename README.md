@@ -13,7 +13,7 @@ The mouse (cursor) controls a cat which will leave paint behind if the left mous
 
 Upon the cat reaching the mouse, it will circle around it as long as the mouse is stationary.
 
-Wiggle the mouse for the cat to pounce and draw a curve.
+~~Wiggle the mouse for the cat to pounce and draw a curve.~~ not yet implemented
 
 The cat will move faster if it's farther from the mouse, and slower if it's closer.
 

@@ -2,7 +2,7 @@ import JSZip from "jszip";
 import type Level from "./level.ts";
 import base from "./base.ts";
 
-const builtInLevelCount = 1;
+export const builtInLevelCount = 1;
 
 export async function loadLevels(target: Level[]) {
     if (target.length !== 0)
